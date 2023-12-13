@@ -7,14 +7,35 @@ def check_credentials():
     entered_password = password_entry.get()
 
     # Kullanıcı adı ve şifre kontrolü
-    if entered_username == "admin" and entered_password == "admin":
+    if entered_username == "emusoft.ai" and entered_password == "18811938":
         root.destroy()
-        os.system("python sendificate.py")  # script.py dosyasını çalıştırma işlemi
+        return Main_Application()
+
     else:
         access_granted_label.config(text="Giriş başarısız! Lütfen tekrar deneyin.", fg="red")
         username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)
 
+def open_contact_window():
+    contact_window = tk.Toplevel(root)
+    contact_window.title("İletişim Bilgileri")
+
+    developer_info = """
+    Geliştiriciler:
+    - Kaan Acar
+    - Mehmet Oktar Önder
+    - Elifnaz Çelik
+
+    İletişim:
+    Email: kaanacar@skiff.com
+    Email: oktar.onder@gmail.com
+    Email: d.elifcelik@gmail.com
+    """
+
+    developer_info_label = tk.Label(contact_window, text=developer_info, font=('Garamond', 14, "bold"))
+    developer_info_label.pack()
+    contact_window.iconbitmap("logo.ico")
+    contact_window.minsize(300, 300)
 # Ana pencere oluşturma
 root = tk.Tk()
 root.title("emusoft.ai/Yazılım ve Yapay Zeka Geliştirme Kulübü")
@@ -22,6 +43,7 @@ root.title("emusoft.ai/Yazılım ve Yapay Zeka Geliştirme Kulübü")
 root.iconbitmap("logo.ico")
 
 # Pencerenin boyutunu sabitler
+root.minsize(450,400)
 root.resizable(False, False)
 
 # Geliştirici bilgisi resmi
@@ -34,7 +56,7 @@ developer_info_panel = tk.Label(root, image=developer_info_img)
 developer_info_panel.pack()
 
 # Geliştirici yazısı
-developer_text = tk.Label(root, text="SENDIFICATE\n\n", font=("Now", 18, "bold"), fg="dark blue")
+developer_text = tk.Label(root, text="Sendificate", font=('Brush Script MT', 50, "bold"), fg="dark blue")
 developer_text.pack()
 
 # Kullanıcı adı girişi
@@ -58,10 +80,12 @@ submit_button.pack()
 # Bilgilendirme etiketi
 access_granted_label = tk.Label(root, text="", fg="black")
 access_granted_label.pack()
-
-# Ek metin
-additional_text = tk.Label(root, text="GELİŞTİRİCİLER\n\nKaan ACAR\nMehmet Oktar ÖNDER\nElifnaz ÇELİK", font=("Now", 10, "bold"))
+# Ek metin ve İletişim butonu
+additional_text = tk.Label(root, text="Soru ve iş birlikleriniz için; ", font=('Garamond', 14, "bold"))
 additional_text.pack()
+
+contact_button = tk.Button(root, text="İletişim", command=open_contact_window, font=('Garamond', 12, "bold"))
+contact_button.pack()
 
 
 

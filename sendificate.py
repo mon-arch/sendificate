@@ -27,6 +27,26 @@ def check_credentials():
         username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)
 
+def open_contact_window():
+    contact_window = tk.Toplevel(root)
+    contact_window.title("İletişim Bilgileri")
+
+    developer_info = """
+    Geliştiriciler:
+    - Kaan Acar
+    - Mehmet Oktar Önder
+    - Elifnaz Çelik
+
+    İletişim:
+    Email: kaanacar@skiff.com
+    Email: oktar.onder@gmail.com
+    Email: d.elifcelik@gmail.com
+    """
+
+    developer_info_label = tk.Label(contact_window, text=developer_info, font=('Garamond', 14, "bold"))
+    developer_info_label.pack()
+    contact_window.iconbitmap("logo.ico")
+    contact_window.minsize(300, 300)
 # Ana pencere oluşturma
 root = tk.Tk()
 root.title("emusoft.ai/Yazılım ve Yapay Zeka Geliştirme Kulübü")
@@ -71,10 +91,12 @@ submit_button.pack()
 # Bilgilendirme etiketi
 access_granted_label = tk.Label(root, text="", fg="black")
 access_granted_label.pack()
-
-# Ek metin
-additional_text = tk.Label(root, text="<Geliştiriciler>\n\n# Kaan Acar\n# Mehmet Oktar Önder\n# Elifnaz Çelik", font=('Garamond', 14, "bold"))
+# Ek metin ve İletişim butonu
+additional_text = tk.Label(root, text="Soru ve iş birlikleriniz için; ", font=('Garamond', 14, "bold"))
 additional_text.pack()
+
+contact_button = tk.Button(root, text="İletişim", command=open_contact_window, font=('Garamond', 12, "bold"))
+contact_button.pack()
 
 def Main_Application():
 
