@@ -1,16 +1,11 @@
 import tkinter as tk
 from ttkbootstrap import Style
 from PIL import ImageTk, Image
-import time
 import os
 
-# Önceden belirlenmiş şifreler listesi
-passwords = ["18811938", "your_old_password", "another_old_password"]
-current_password_index = 0
 
-last_password_change = time.time()  # Şu anki zamanı al
-change_interval = 30 * 24 * 60 * 60  # 30 gün = 30 * 24 saat * 60 dakika * 60 saniye
-
+def exit_application():
+    root.destroy()
 def check_credentials():
     entered_username = username_entry.get()
     entered_password = password_entry.get()
@@ -46,30 +41,6 @@ def open_contact_window():
     contact_window.iconbitmap("logo.ico")
     contact_window.minsize(300, 300)
 
-def check_password_change():
-    global current_password_index, last_password_change
-
-    current_time = time.time()
-    time_remaining = change_interval - (current_time - last_password_change)
-
-    # Eğer son şifre değişikliği üzerinden belirli bir süre geçtiyse, şifreyi değiştir
-    if current_time - last_password_change >= change_interval:
-        if current_password_index < len(passwords) - 1:
-            current_password_index += 1
-        else:
-            current_password_index = 0
-
-        last_password_change = current_time  # Yeni zamanı güncelle
-
-        access_granted_label.config(text="Şifre değiştirildi. Yeni şifre kullanılabilir.", fg="green")
-    else:
-        # Şifre değiştirme zamanı değilse, kullanıcıya bilgi ver ve geri sayımı göster
-        access_granted_label.config(text=f"Şifre zaten güncel. Değişikliğe kalan süre: {int(time_remaining/60)} dakika", fg="black")
-
-    # 1 dakika sonra tekrar kontrol et
-    root.after(60000, check_password_change)  # 60 saniye * 1000 milisaniye = 60000 milisaniye
-
-
 def center_window(window, width, height):
     # Ekranın genişliği ve yüksekliği
     screen_width = window.winfo_screenwidth()
@@ -83,6 +54,7 @@ def center_window(window, width, height):
 
 window_width = 450
 window_height = 500
+
 # Ana pencere oluşturma
 root = tk.Tk()
 root.overrideredirect(1)
@@ -91,14 +63,10 @@ window_height = 500
 root.title("emusoft.ai/Yazılım ve Yapay Zeka Geliştirme Kulübü")
 root.iconbitmap("logo.ico")
 
-# Pencerenin boyutunu sabitler
-
 
 # Stili Tkinter için ayarla
 style = Style(theme='flatly')
 
-
-# Devam eden kod
 # Geliştirici bilgisi resmi
 developer_info_img = Image.open("emusoft.ai.png")
 developer_info_img = developer_info_img.resize((200, 200), Image.LANCZOS)
@@ -109,7 +77,7 @@ developer_info_panel = tk.Label(root, image=developer_info_img)
 developer_info_panel.pack()
 
 # Geliştirici yazısı
-developer_text = tk.Label(root, text="Sendificate", font=('Brush Script MT', 50, "bold"), fg="dark blue")
+developer_text = tk.Label(root, text="Sendificate", font=('Brush Script MT', 50, "bold"), fg='dark blue')
 developer_text.pack()
 
 # Kullanıcı adı girişi
@@ -125,6 +93,10 @@ password_label.pack()
 
 password_entry = tk.Entry(root, show="*")
 password_entry.pack()
+
+# Ek Yazı
+additional_text = tk.Label(root, text="", font=('Garamond', 5, "bold"))
+additional_text.pack()
 
 # Giriş butonu
 submit_button = tk.Button(root, text="Giriş Yap", command=check_credentials)
@@ -144,7 +116,9 @@ contact_button.pack()
 additional_text = tk.Label(root, text="", font=('Garamond', 14, "bold"))
 additional_text.pack()
 
-check_password_change()
+exit_button = tk.Button(root, text="X", command=exit_application, bg='red', fg='white', font=('Arial', 10, 'bold'))
+exit_button.place(relx=1, x=-2, y=2, anchor='ne')
+
 center_window(root, window_width, window_height)
 root.mainloop()
 
