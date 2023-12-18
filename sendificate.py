@@ -10,6 +10,7 @@ import pandas as pd
 from pptx import Presentation
 
 import os
+from PIL import ImageTk, Image
 
 import tkinter as tk
 from ttkbootstrap import Style
@@ -132,23 +133,6 @@ exit_button = tk.Button(root, text="X", command=exit_application, bg='red', fg='
 exit_button.place(relx=1, x=-2, y=2, anchor='ne')
 
 center_window(root, window_width, window_height)
-
-def Main_Application():
-    import glob
-    import smtplib
-    from email.mime.application import MIMEApplication
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-    from tkinter import filedialog, scrolledtext
-
-    import comtypes.client
-    import pandas as pd
-    from pptx import Presentation
-
-    import os
-
-    import tkinter as tk
-    from ttkbootstrap import Style
 
     def print_to_console(message):
         console.config(state=tk.NORMAL)
