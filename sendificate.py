@@ -17,7 +17,6 @@ from PIL import ImageTk, Image
 import tkinter as tk
 from ttkbootstrap import Style
 from PIL import ImageTk, Image
-import os
 
 
 def exit_application():
