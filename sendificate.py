@@ -12,11 +12,8 @@ from pptx import Presentation
 import os
 
 import tkinter as tk
-from PIL import ImageTk, Image
-
-import tkinter as tk
 from ttkbootstrap import Style
-from PIL import ImageTk, Image
+
 
 
 def exit_application():
