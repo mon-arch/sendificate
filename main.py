@@ -40,7 +40,10 @@ def create_powerpoint(excel_path, template_path, output_folder):
                                 if target_text in run.text:
                                     run.text = run.text.replace(target_text, value_upper)
 
-            pptx_file_name = f"{index + 1}.pptx"
+            # Yeni dosya isimleri için formatlanmış isim oluşturma
+            file_number = str(index + 1).zfill(4)  # Dört basamaklı numara oluşturma
+            pptx_file_name = f"{file_number}.pptx"
+
             output_path = os.path.join(output_folder, pptx_file_name)
             print_to_console(f"'{pptx_file_name}' adlı PowerPoint sunusu '{output_folder}' klasörüne kaydedildi.")
             presentation.save(output_path)
@@ -312,5 +315,6 @@ console.pack()
 
 # Örnek bir kullanım
 print_to_console("/*\nGeliştiriciler\n---------------\nKaan ACAR - kaanacar@skiff.com\nMehmet Oktar ÖNDER - oktar.onder@gmail.com\nElifnaz ÇELİK - d.elifcelik@gmail.com\n*/")
+
 
 root.mainloop()

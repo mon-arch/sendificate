@@ -16,7 +16,6 @@ import tkinter as tk
 from ttkbootstrap import Style
 
 
-
 def exit_application():
     root.destroy()
 def check_credentials():
@@ -134,6 +133,8 @@ exit_button.place(relx=1, x=-2, y=2, anchor='ne')
 
 center_window(root, window_width, window_height)
 
+def Main_Application():
+
     def print_to_console(message):
         console.config(state=tk.NORMAL)
         console.insert(tk.END, message + "\n")
@@ -160,7 +161,10 @@ center_window(root, window_width, window_height)
                                 if target_text in run.text:
                                     run.text = run.text.replace(target_text, value_upper)
 
-            pptx_file_name = f"{index + 1}.pptx"
+            # Yeni dosya isimleri için formatlanmış isim oluşturma
+            file_number = str(index + 1).zfill(4)  # Dört basamaklı numara oluşturma
+            pptx_file_name = f"{file_number}.pptx"
+
             output_path = os.path.join(output_folder, pptx_file_name)
             print_to_console(f"'{pptx_file_name}' adlı PowerPoint sunusu '{output_folder}' klasörüne kaydedildi.")
             presentation.save(output_path)
