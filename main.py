@@ -29,6 +29,13 @@ def create_powerpoint(excel_path, template_path, output_folder):
         os.makedirs(output_folder, exist_ok=True)
 
         for index, value in enumerate(column_data):
+            # Türkçe karakterlerin dönüşümü
+            turkish_to_english = str.maketrans("iı", "İI")
+
+            for i, char in enumerate(value):
+                if char.lower() in "iı":
+                    value = value[:i] + char.translate(turkish_to_english) + value[i + 1:]
+                        
             value_upper = str(value).upper()
             presentation = Presentation(template_path)
 
