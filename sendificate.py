@@ -4,6 +4,7 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from tkinter import filedialog, scrolledtext
+import threading
 
 import comtypes.client
 import pandas as pd
@@ -150,13 +151,6 @@ def Main_Application():
         os.makedirs(output_folder, exist_ok=True)
 
         for index, value in enumerate(column_data):
-            # Türkçe karakterlerin dönüşümü
-            turkish_to_english = str.maketrans("iı", "İI")
-
-            for i, char in enumerate(value):
-                if char.lower() in "iı":
-                    value = value[:i] + char.translate(turkish_to_english) + value[i + 1:]
-                    
             value_upper = str(value).upper()
             presentation = Presentation(template_path)
 
@@ -180,6 +174,7 @@ def Main_Application():
     def select_excel():
         file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
         if file_path:
+            # PowerPoint oluşturma bölümü için Excel dosyası yolunu güncelle
             excel_entry.delete(0, tk.END)
             excel_entry.insert(tk.END, file_path)
 
@@ -192,8 +187,13 @@ def Main_Application():
     def select_output_folder():
         folder_path = filedialog.askdirectory()
         if folder_path:
+            # PowerPoint oluşturma bölümü için klasör yolunu güncelle
             output_entry.delete(0, tk.END)
             output_entry.insert(tk.END, folder_path)
+
+            # PDF dönüştürme bölümü için klasör yolunu güncelle
+            folder_path_entry.delete(0, tk.END)
+            folder_path_entry.insert(tk.END, folder_path)
 
     def generate_powerpoints():
 
@@ -217,14 +217,18 @@ def Main_Application():
         presentation.Close()
 
         powerpoint.Quit()
-        print_to_console(f"PDF'in kaydedildiği konum: {pdf_file}")
+        return pdf_file
 
     def convert_folder_to_pdf(folder_path, output_folder_path):
         for file in os.listdir(folder_path):
             if file.endswith(".pptx"):
-                convert_pptx_to_pdf(os.path.join(folder_path, file), output_folder_path)
-                print_to_console(f"'{file}' adlı dosya dönüştürüldü.")
-        print_to_console("Tüm dönüştürme işlemleri tamamlandı.")
+                pdf_file = convert_pptx_to_pdf(os.path.join(folder_path, file), output_folder_path)
+                print_to_console(f"'{file}' adlı dosya dönüştürüldü ve '{pdf_file}' olarak kaydedildi.")
+                root.update()  # Arayüzü güncelle
+
+    def start_conversion_thread(folder_path, output_folder_path):
+        conversion_thread = threading.Thread(target=convert_folder_to_pdf, args=(folder_path, output_folder_path))
+        conversion_thread.start()
 
     def select_input_folder():
         folder_path = filedialog.askdirectory()
@@ -241,9 +245,7 @@ def Main_Application():
     def convert():
         input_folder_path = folder_path_entry.get()
         output_folder_path = output_folder_entry.get()
-
-        if input_folder_path and output_folder_path:
-            convert_folder_to_pdf(input_folder_path, output_folder_path)
+        start_conversion_thread(input_folder_path, output_folder_path)
 
     def send_email_with_pdf_and_message(pdf_file, recipient_email, sender_email, sender_password, subject,
                                         message_content):
@@ -293,6 +295,9 @@ def Main_Application():
         if folder_path:
             pdf_folder_entry.delete(0, tk.END)
             pdf_folder_entry.insert(tk.END, folder_path)
+
+    def send_emails_thread():
+        threading.Thread(target=send_emails).start()
 
     def send_emails():
         excel_file = excel_entry.get()
@@ -427,7 +432,7 @@ def Main_Application():
     pdf_folder_button_email.grid(row=5, column=2)
 
     # Send Button
-    send_button = tk.Button(frame3, text="Emailleri Gönder", command=send_emails)
+    send_button = tk.Button(frame3, text="Emailleri Gönder", command=send_emails_thread)
     send_button.grid(row=6, columnspan=3)
 
     frame4 = tk.LabelFrame(root, text="Konsol", padx=10, pady=10)
